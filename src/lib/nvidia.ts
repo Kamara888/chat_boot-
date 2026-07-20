@@ -6,12 +6,19 @@ const AI_MODEL = process.env.AI_MODEL || 'z-ai/glm-5.2';
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434/v1/chat/completions';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3';
 
-const openai = new OpenAI({
-  baseURL: AI_BASE_URL,
-  apiKey: AI_API_KEY,
-  timeout: 30000,
-  maxRetries: 0,
-});
+let openaiClient: OpenAI | null = null;
+function getClient(): OpenAI | null {
+  if (!openaiClient) {
+    if (!AI_API_KEY) return null;
+    openaiClient = new OpenAI({
+      baseURL: AI_BASE_URL,
+      apiKey: AI_API_KEY,
+      timeout: 30000,
+      maxRetries: 0,
+    });
+  }
+  return openaiClient;
+}
 
 const SYSTEM_PROMPT = `You are Sarah, a compassionate and empathetic AI mental health companion named "MindfulChat Wellness Companion". Your role is to provide emotional support, active listening, and helpful coping strategies.
 
@@ -30,9 +37,11 @@ type Msg = { role: 'user' | 'assistant' | 'system'; content: string };
 type SarahResult = { content: string; sentiment: string; degraded?: boolean };
 
 async function callPrimary(messages: Msg[]): Promise<string | null> {
+  const client = getClient();
+  if (!client) return null;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const response = await openai.chat.completions.create({
+      const response = await client.chat.completions.create({
         model: AI_MODEL,
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
         temperature: 0.7,
