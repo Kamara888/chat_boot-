@@ -1,0 +1,30 @@
+name: Sync Database (Prisma)
+
+# Keeps the Postgres schema in sync on every push to main.
+# Requires a GitHub repo secret:  DATABASE_URL  (the Neon/Supabase connection string)
+# Add it at:  repo → Settings → Secrets and variables → Actions → New repository secret
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  db-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx prisma generate
+
+      - name: Push schema to database
+        run: npx prisma db push --accept-data-loss
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

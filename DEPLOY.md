@@ -14,6 +14,9 @@ Hosted on **Vercel** (free) with a **free Postgres** (Neon/Supabase).
    ```bash
    npx prisma db push
    ```
+   The schema is also pushed automatically on every deploy by the
+   `.github/workflows/db-sync.yml` workflow — but it needs `DATABASE_URL`
+   added as a **GitHub Actions secret** (repo → Settings → Secrets → Actions).
 
 ## 3. Environment variables
 In Vercel → Project → **Settings → Environment Variables**, add:
