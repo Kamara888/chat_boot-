@@ -110,7 +110,16 @@ const GENERIC_FALLBACKS = [
 let fallbackIndex = 0;
 
 function getFallbackResponse(messages: { role: string; content: string }[]): { content: string; sentiment: string } {
-  const lastUser = messages.filter(m => m.role === 'user').pop()?.content.toLowerCase() || '';
+  const userMsgs = messages.filter(m => m.role === 'user');
+  const lastUser = userMsgs[userMsgs.length - 1]?.content.toLowerCase() || '';
+
+  if (/who are you|about you|yourself|your name|what are you|tell me about you|talk about your/.test(lastUser)) {
+    return {
+      content:
+        "I'm Sarah, your MindfulChat wellness companion. 💙 I'm here to listen, offer gentle support, and help you work through whatever is on your mind. I'm not a therapist, but I'm always here for you. What would you like to talk about today?",
+      sentiment: 'positive',
+    };
+  }
 
   if (/anx(ious|iety)|worried/.test(lastUser)) {
     return { content: "I hear you, and anxiety can feel really overwhelming. One thing that can help is the 4-7-8 breathing technique: breathe in for 4 seconds, hold for 7, then exhale slowly for 8. Would you like to try it together? 💙", sentiment: 'neutral' };
