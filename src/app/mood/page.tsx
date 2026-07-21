@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Sidebar from '@/components/Sidebar';
+import MobileBottomBar from '@/components/MobileBottomBar';
 import MoodCheckIn from '@/components/MoodCheckIn';
 import MoodChart from '@/components/MoodChart';
 import MoodStats from '@/components/MoodStats';
@@ -142,6 +143,7 @@ export default function MoodPage() {
           </div>
         </div>
       </div>
+      <MobileBottomBar />
     </div>
   );
 }

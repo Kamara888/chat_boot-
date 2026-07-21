@@ -12,11 +12,11 @@ interface Props {
   chartData: number[];
   moods: Record<string, number>;
   isMobile?: boolean;
-  collapsed?: boolean;
-  onToggle?: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, isMobile, collapsed, onToggle }: Props) {
+export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, isMobile, isOpen, onClose }: Props) {
   const totalEntries = Object.values(moods).filter(v => v > 0).length;
   const values = Object.values(moods).filter(v => v > 0);
   const average = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
@@ -62,13 +62,20 @@ export default function RightPanel({ moodRating, onMoodSelect, chartData, moods,
 
   if (isMobile) {
     return (
-      <aside className="mobile-wellness-card">
-        <div className="mobile-wellness-header" onClick={onToggle}>
-          <span>📊 Wellness Overview</span>
-          <span className={`mobile-wellness-chevron ${!collapsed ? 'open' : ''}`}>▾</span>
-        </div>
-        {!collapsed && <div className="mobile-wellness-body">{body}</div>}
-      </aside>
+      <>
+        {isOpen && (
+          <>
+            <div className="mobile-sheet-backdrop" onClick={onClose} />
+            <div className="mobile-sheet">
+              <div className="mobile-sheet-handle" onClick={onClose}>
+                <div className="mobile-sheet-handle-bar" />
+              </div>
+              <div className="panel-header" style={{ paddingTop: 0 }}>📊 Wellness Overview</div>
+              {body}
+            </div>
+          </>
+        )}
+      </>
     );
   }
 
