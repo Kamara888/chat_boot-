@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
+import { useState, useEffect } from 'react';
 
 interface SidebarProps {
   onToggleDashboard?: () => void;
@@ -12,6 +13,24 @@ export default function Sidebar({ onToggleDashboard }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   const navItems = [
     { href: '/chat', icon: '💬', label: 'Chat' },
@@ -20,11 +39,17 @@ export default function Sidebar({ onToggleDashboard }: SidebarProps) {
     { href: '/resources', icon: '📚', label: 'Resources' },
   ];
 
-  return (
-    <aside className="sidebar">
+  const handleNavClick = () => {
+    if (isMobile) setMobileOpen(false);
+  };
+
+  const closeMobile = () => setMobileOpen(false);
+
+  const content = (
+    <>
       <div
         className="sidebar-header clickable"
-        onClick={onToggleDashboard}
+        onClick={() => { if (isMobile) closeMobile(); else onToggleDashboard?.(); }}
         title="Toggle dashboard panel"
         role="button"
         tabIndex={0}
@@ -39,7 +64,7 @@ export default function Sidebar({ onToggleDashboard }: SidebarProps) {
         </div>
       </div>
 
-      <nav className="nav">
+      <nav className="nav" onClick={handleNavClick}>
         {navItems.map(item => (
           <Link
             key={item.href}
@@ -80,6 +105,31 @@ export default function Sidebar({ onToggleDashboard }: SidebarProps) {
           </div>
         )}
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {isMobile && (
+        <button
+          className="sidebar-hamburger"
+          onClick={() => setMobileOpen(v => !v)}
+          aria-label="Toggle navigation menu"
+        >
+          ☰
+        </button>
+      )}
+
+      {isMobile ? (
+        <>
+          {mobileOpen && <div className="backdrop-fixed" onClick={closeMobile} />}
+          <aside className={`sidebar sidebar-mobile ${mobileOpen ? 'sidebar-mobile-open' : ''}`}>
+            {content}
+          </aside>
+        </>
+      ) : (
+        <aside className="sidebar">{content}</aside>
+      )}
+    </>
   );
 }

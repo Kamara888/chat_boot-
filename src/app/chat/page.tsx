@@ -24,6 +24,8 @@ export default function ChatPage() {
   const [moods, setMoods] = useState<Record<string, number>>({});
   const [showDashboard, setShowDashboard] = useState(true);
   const [aiDegraded, setAiDegraded] = useState(false);
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<ChatMessageType[]>([]);
   const voiceActiveRef = useRef(false);
@@ -213,6 +215,22 @@ export default function ChatPage() {
   }, [messages, isLoading]);
 
   useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  useEffect(() => {
+    if (mobilePanelOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobilePanelOpen]);
+
+  useEffect(() => {
     if (startedRef.current) return;
     if (sessionStatus === 'loading') return;
     startedRef.current = true;
@@ -292,7 +310,17 @@ export default function ChatPage() {
               </>
             )}
           </div>
-          {showDashboard && (
+          {isMobile ? (
+            <RightPanel
+              moodRating={moodRating}
+              onMoodSelect={handleMoodSelect}
+              chartData={getChartData()}
+              moods={moods}
+              isMobile
+              isOpen={mobilePanelOpen}
+              onClose={() => setMobilePanelOpen(false)}
+            />
+          ) : showDashboard && (
             <RightPanel
               moodRating={moodRating}
               onMoodSelect={handleMoodSelect}
@@ -301,6 +329,11 @@ export default function ChatPage() {
             />
           )}
         </div>
+        {isMobile && (
+          <button className="mobile-fab" onClick={() => setMobilePanelOpen(v => !v)} aria-label="Open dashboard">
+            📊
+          </button>
+        )}
       </div>
     </div>
   );

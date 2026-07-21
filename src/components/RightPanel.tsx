@@ -11,15 +11,18 @@ interface Props {
   onMoodSelect: (rating: number) => void;
   chartData: number[];
   moods: Record<string, number>;
+  isMobile?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function RightPanel({ moodRating, onMoodSelect, chartData, moods }: Props) {
+export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, isMobile, isOpen, onClose }: Props) {
   const totalEntries = Object.values(moods).filter(v => v > 0).length;
   const values = Object.values(moods).filter(v => v > 0);
   const average = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
 
-  return (
-    <aside className="panel">
+  const content = (
+    <>
       <div className="panel-header">📊 Wellness Overview</div>
 
       <div className="panel-section">
@@ -56,6 +59,22 @@ export default function RightPanel({ moodRating, onMoodSelect, chartData, moods 
           tag="mindfulness"
         />
       </div>
-    </aside>
+    </>
   );
+
+  if (isMobile) {
+    return (
+      <>
+        {isOpen && <div className="backdrop-fixed" onClick={onClose} />}
+        <aside className={`panel-mobile ${isOpen ? 'panel-mobile-open' : ''}`}>
+          <div className="panel-mobile-handle" onClick={onClose}>
+            <div className="panel-mobile-handle-bar" />
+          </div>
+          {content}
+        </aside>
+      </>
+    );
+  }
+
+  return <aside className="panel">{content}</aside>;
 }
