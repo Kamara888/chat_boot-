@@ -7,11 +7,9 @@ interface HeaderProps {
   onToggleVoice: () => void;
   onNotifications: () => void;
   statusNote?: string;
-  onMenuToggle?: () => void;
-  onToggleWellness?: () => void;
 }
 
-export default function Header({ voiceMode, onToggleVoice, onNotifications, statusNote, onToggleWellness }: HeaderProps) {
+export default function Header({ voiceMode, onToggleVoice, onNotifications, statusNote }: HeaderProps) {
   return (
     <header className="header">
       <div className="header-left">
@@ -22,11 +20,6 @@ export default function Header({ voiceMode, onToggleVoice, onNotifications, stat
         </div>
       </div>
       <div className="header-actions">
-        {onToggleWellness && (
-          <button className="header-btn header-btn-wellness" onClick={onToggleWellness} title="Wellness Overview">
-            📊
-          </button>
-        )}
         <button className={`header-btn ${voiceMode ? 'active' : ''}`} onClick={onToggleVoice} title="Toggle voice mode">
           🎤
         </button>

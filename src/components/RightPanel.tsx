@@ -11,18 +11,21 @@ interface Props {
   onMoodSelect: (rating: number) => void;
   chartData: number[];
   moods: Record<string, number>;
-  variant?: 'desktop' | 'sheet' | 'dropdown';
+  isMobile?: boolean;
   isOpen?: boolean;
   onClose?: () => void;
+  inline?: boolean;
 }
 
-export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, variant = 'desktop', isOpen, onClose }: Props) {
+export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, isMobile, isOpen, onClose, inline }: Props) {
   const totalEntries = Object.values(moods).filter(v => v > 0).length;
   const values = Object.values(moods).filter(v => v > 0);
   const average = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
 
-  const sections = (
+  const content = (
     <>
+      <div className="panel-header">📊 Wellness Overview</div>
+
       <div className="panel-section">
         <div className="panel-label">Mood Check-in</div>
         <MoodCheckIn onSelect={onMoodSelect} selected={moodRating} />
@@ -60,7 +63,11 @@ export default function RightPanel({ moodRating, onMoodSelect, chartData, moods,
     </>
   );
 
-  if (variant === 'sheet') {
+  if (inline) {
+    return <div className="panel-inline">{content}</div>;
+  }
+
+  if (isMobile) {
     return (
       <>
         {isOpen && <div className="backdrop-fixed" onClick={onClose} />}
@@ -68,32 +75,11 @@ export default function RightPanel({ moodRating, onMoodSelect, chartData, moods,
           <div className="panel-mobile-handle" onClick={onClose}>
             <div className="panel-mobile-handle-bar" />
           </div>
-          <div className="panel-header">📊 Wellness Overview</div>
-          {sections}
+          {content}
         </aside>
       </>
     );
   }
 
-  if (variant === 'dropdown') {
-    return (
-      <>
-        {isOpen && <div className="backdrop-fixed" onClick={onClose} />}
-        <div className={`wellness-dropdown ${isOpen ? 'wellness-dropdown-open' : ''}`}>
-          <div className="wellness-dropdown-header">
-            <span>📊 Wellness Overview</span>
-            <button className="wellness-dropdown-close" onClick={onClose}>✕</button>
-          </div>
-          <div className="wellness-dropdown-body">{sections}</div>
-        </div>
-      </>
-    );
-  }
-
-  return (
-    <aside className="panel">
-      <div className="panel-header">📊 Wellness Overview</div>
-      {sections}
-    </aside>
-  );
+  return <aside className="panel">{content}</aside>;
 }

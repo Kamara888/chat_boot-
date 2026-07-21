@@ -24,7 +24,6 @@ export default function ChatPage() {
   const [moods, setMoods] = useState<Record<string, number>>({});
   const [showDashboard, setShowDashboard] = useState(true);
   const [aiDegraded, setAiDegraded] = useState(false);
-  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<ChatMessageType[]>([]);
@@ -222,15 +221,6 @@ export default function ChatPage() {
   }, []);
 
   useEffect(() => {
-    if (mobilePanelOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [mobilePanelOpen]);
-
-  useEffect(() => {
     if (startedRef.current) return;
     if (sessionStatus === 'loading') return;
     startedRef.current = true;
@@ -274,7 +264,6 @@ export default function ChatPage() {
           onToggleVoice={toggleVoice}
           onNotifications={() => {}}
           statusNote={aiDegraded ? 'Offline mode — limited responses' : undefined}
-          onToggleWellness={() => setMobilePanelOpen(v => !v)}
         />
         <CrisisBanner isCrisis={isCrisis} />
         <div className="content">
@@ -297,6 +286,15 @@ export default function ChatPage() {
               {isLoading && <TypingIndicator />}
               <div ref={messagesEndRef} />
             </div>
+            {isMobile && (
+              <RightPanel
+                moodRating={moodRating}
+                onMoodSelect={handleMoodSelect}
+                chartData={getChartData()}
+                moods={moods}
+                inline
+              />
+            )}
             {voiceMode ? (
               <VoiceControl
                 isListening={recognition.isListening}
@@ -311,17 +309,7 @@ export default function ChatPage() {
               </>
             )}
           </div>
-          {isMobile ? (
-            <RightPanel
-              moodRating={moodRating}
-              onMoodSelect={handleMoodSelect}
-              chartData={getChartData()}
-              moods={moods}
-              variant="dropdown"
-              isOpen={mobilePanelOpen}
-              onClose={() => setMobilePanelOpen(false)}
-            />
-          ) : showDashboard && (
+          {!isMobile && showDashboard && (
             <RightPanel
               moodRating={moodRating}
               onMoodSelect={handleMoodSelect}

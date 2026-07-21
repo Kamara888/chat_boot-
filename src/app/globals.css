@@ -76,9 +76,9 @@ body{
 .header{height:64px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0}
 .header-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
 .header-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--calm),var(--accent));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.header-info{min-width:0;overflow:hidden}
-.header-title{font-size:14px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.header-sub{font-size:11px;color:var(--accent);display:flex;align-items:center;gap:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.header-info{min-width:0}
+.header-title{font-size:14px;font-weight:600;color:var(--text)}
+.header-sub{font-size:11px;color:var(--accent);display:flex;align-items:center;gap:5px}
 .header-sub::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block}
 .header-sub.degraded{color:var(--warm)}
 .header-sub.degraded::before{background:var(--warm)}
@@ -234,8 +234,8 @@ body{
 .page{display:flex;height:100vh;overflow:hidden}
 .page-head{height:64px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
 .page-head-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--calm),var(--accent));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.page-title{font-size:16px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.page-sub{font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.page-title{font-size:16px;font-weight:600;color:var(--text)}
+.page-sub{font-size:12px;color:var(--text2)}
 .page-content{flex:1;overflow-y:auto;padding:24px}
 .page-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
@@ -341,6 +341,28 @@ body{
   background: var(--surface3);
 }
 
+/* Inline panel (mobile: part of chat flow) */
+.panel-inline {
+  border-top: 1px solid var(--border);
+  padding: 8px 0;
+  margin: 0 12px;
+}
+.panel-inline .panel-header {
+  font-size: 11px;
+  padding: 12px 8px 8px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.panel-inline .panel-section {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.panel-inline .panel-section:last-child {
+  border-bottom: none;
+}
+
 /* Mobile FAB */
 .mobile-fab {
   position: fixed;
@@ -375,264 +397,87 @@ body{
   .sidebar-hamburger {
     display: flex;
   }
-  .header-btn-wellness {
-    display: flex;
-  }
   .panel {
     display: none;
   }
   .panel-mobile {
     display: block;
   }
-
-  .header {
-    padding: 0 8px !important;
-    height: 52px;
-    padding-top: var(--safe-top) !important;
-    gap: 8px;
-  }
-  .header-left {
-    padding-left: 42px;
-    gap: 8px;
-    min-width: 0;
-  }
-  .header-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-  .header-title {
-    font-size: 13px;
-  }
-  .header-sub {
-    font-size: 10px;
-  }
-  .header-actions {
-    gap: 4px;
-  }
-  .header-btn {
-    width: 30px;
-    height: 30px;
-    font-size: 13px;
-  }
-  .header-btn-wellness {
+  .mobile-fab {
     display: flex;
   }
 
-  .sidebar-hamburger {
-    top: 12px;
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+  .header {
+    padding: 0 12px !important;
+    height: 56px;
+    padding-top: var(--safe-top) !important;
+  }
+  .header-left {
+    padding-left: 42px;
   }
 
   .msg {
     max-width: 92%;
   }
-  .msg-content {
-    font-size: 13px;
-  }
 
   .messages {
-    padding: 10px;
-    gap: 12px;
+    padding: 12px;
   }
 
   .input-bar {
-    padding: 8px 10px max(12px, var(--safe-bottom));
-    gap: 8px;
+    padding: 10px 12px max(16px, var(--safe-bottom));
   }
   .input-wrap textarea {
     font-size: 16px;
-    padding: 6px 10px;
-  }
-  .input-actions {
-    gap: 0;
-  }
-  .send-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
   }
 
   .quick-replies {
-    padding: 0 10px 2px;
-    gap: 4px;
+    padding: 0 12px 4px;
   }
   .quick-reply {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 
   .crisis-banner {
-    padding: 8px 10px;
+    padding: 10px 12px;
     flex-wrap: wrap;
-    gap: 6px;
-    font-size: 12px;
+    gap: 8px;
   }
   .crisis-banner .hotline {
     width: 100%;
     text-align: center;
-    padding: 5px 12px;
-    font-size: 11px;
   }
 
   .voice-control {
-    padding: 10px 12px max(12px, var(--safe-bottom));
-    gap: 12px;
-  }
-  .voice-mic {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
+    padding: 12px 16px max(16px, var(--safe-bottom));
   }
 
   .auth-card {
-    padding: 20px 16px;
+    padding: 24px 20px;
   }
 
   .page-content {
-    padding: 12px;
+    padding: 16px;
   }
   .page-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
   }
 
   .page-head {
-    padding: 0 12px 0 52px;
-    height: 52px;
-    gap: 10px;
-  }
-  .page-head-icon {
-    width: 30px;
-    height: 30px;
-    font-size: 15px;
-  }
-  .page-title {
-    font-size: 14px;
-  }
-  .page-sub {
-    font-size: 11px;
-  }
-
-  .card {
-    padding: 16px;
-  }
-  .card-title {
-    font-size: 13px;
-  }
-  .card-desc {
-    font-size: 12px;
+    padding-left: 52px;
   }
 
   .mood-selector {
     gap: 4px;
   }
   .mood-option {
-    width: 30px;
-    height: 30px;
-    font-size: 13px;
-  }
-  .check-in-title {
-    font-size: 13px;
-  }
-  .check-in-desc {
-    font-size: 11px;
-  }
-  .panel-section {
-    padding: 12px 16px;
-  }
-
-  .mood-stat-value {
-    font-size: 16px;
-  }
-  .mood-stat-label {
-    font-size: 9px;
-  }
-
-  .note-input {
-    font-size: 12px;
-    min-height: 60px;
-  }
-  .emotion-chip {
-    font-size: 12px;
-    padding: 5px 12px;
-  }
-  .section-title {
-    font-size: 12px;
-  }
-
-  .hotline-num {
-    font-size: 16px;
-  }
-
-  /* Wellness dropdown header on mobile */
-  .wellness-dropdown {
-    top: 52px;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
 
 .voice-active ~ .mobile-fab {
   display: none !important;
-}
-
-/* Wellness dropdown (mobile) */
-.wellness-dropdown {
-  position: fixed;
-  top: 56px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 25;
-  background: var(--surface);
-  overflow-y: auto;
-  border-top: 1px solid var(--border);
-  transform: translateY(-100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.wellness-dropdown-open {
-  transform: translateY(0);
-}
-.wellness-dropdown-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--surface);
-  z-index: 1;
-}
-.wellness-dropdown-close {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: none;
-  background: var(--surface2);
-  color: var(--text2);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  transition: var(--transition);
-}
-.wellness-dropdown-close:hover {
-  background: var(--surface3);
-  color: var(--text);
-}
-.wellness-dropdown-body {
-  padding-bottom: var(--safe-bottom);
-}
-
-/* Header wellness button (mobile only) */
-.header-btn-wellness {
-  display: none;
 }
