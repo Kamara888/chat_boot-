@@ -1,7 +1,6 @@
 'use client';
 
 import Sidebar from '@/components/Sidebar';
-import MobileBottomBar from '@/components/MobileBottomBar';
 import ResourceCard from '@/components/ResourceCard';
 
 const RESOURCES = [
@@ -40,7 +39,6 @@ export default function ResourcesPage() {
           </div>
         </div>
       </div>
-      <MobileBottomBar />
     </div>
   );
 }

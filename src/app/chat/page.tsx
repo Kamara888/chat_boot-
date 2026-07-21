@@ -9,7 +9,6 @@ import TypingIndicator from '@/components/TypingIndicator';
 import QuickReplies from '@/components/QuickReplies';
 import CrisisBanner from '@/components/CrisisBanner';
 import RightPanel from '@/components/RightPanel';
-import MobileBottomBar from '@/components/MobileBottomBar';
 import VoiceControl from '@/components/VoiceControl';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis';
@@ -25,7 +24,7 @@ export default function ChatPage() {
   const [moods, setMoods] = useState<Record<string, number>>({});
   const [showDashboard, setShowDashboard] = useState(true);
   const [aiDegraded, setAiDegraded] = useState(false);
-  const [wellnessOpen, setWellnessOpen] = useState(false);
+  const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<ChatMessageType[]>([]);
@@ -270,6 +269,17 @@ export default function ChatPage() {
         <CrisisBanner isCrisis={isCrisis} />
         <div className="content">
           <div className="chat-area">
+            {isMobile && (
+              <RightPanel
+                moodRating={moodRating}
+                onMoodSelect={handleMoodSelect}
+                chartData={getChartData()}
+                moods={moods}
+                isMobile
+                collapsed={!mobilePanelExpanded}
+                onToggle={() => setMobilePanelExpanded(v => !v)}
+              />
+            )}
             <div className="messages">
               {messages.length === 0 && (
                 <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text3)' }}>
@@ -311,22 +321,7 @@ export default function ChatPage() {
             />
           )}
         </div>
-        {isMobile && (
-          <button className="mobile-fab mobile-fab-pulse" onClick={() => setWellnessOpen(v => !v)} aria-label="Wellness dashboard">
-            📊
-          </button>
-        )}
-        <RightPanel
-          moodRating={moodRating}
-          onMoodSelect={handleMoodSelect}
-          chartData={getChartData()}
-          moods={moods}
-          isMobile={isMobile}
-          isOpen={wellnessOpen}
-          onClose={() => setWellnessOpen(false)}
-        />
       </div>
-      {isMobile && <MobileBottomBar />}
     </div>
   );
 }

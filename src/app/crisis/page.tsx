@@ -1,7 +1,6 @@
 'use client';
 
 import Sidebar from '@/components/Sidebar';
-import MobileBottomBar from '@/components/MobileBottomBar';
 import ResourceCard from '@/components/ResourceCard';
 
 export default function CrisisPage() {
@@ -88,7 +87,6 @@ export default function CrisisPage() {
           </div>
         </div>
       </div>
-      <MobileBottomBar />
     </div>
   );
 }
