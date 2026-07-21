@@ -274,6 +274,7 @@ export default function ChatPage() {
           onToggleVoice={toggleVoice}
           onNotifications={() => {}}
           statusNote={aiDegraded ? 'Offline mode — limited responses' : undefined}
+          onToggleWellness={() => setMobilePanelOpen(v => !v)}
         />
         <CrisisBanner isCrisis={isCrisis} />
         <div className="content">
@@ -316,7 +317,7 @@ export default function ChatPage() {
               onMoodSelect={handleMoodSelect}
               chartData={getChartData()}
               moods={moods}
-              isMobile
+              variant="dropdown"
               isOpen={mobilePanelOpen}
               onClose={() => setMobilePanelOpen(false)}
             />
@@ -329,11 +330,6 @@ export default function ChatPage() {
             />
           )}
         </div>
-        {isMobile && (
-          <button className="mobile-fab" onClick={() => setMobilePanelOpen(v => !v)} aria-label="Open dashboard">
-            📊
-          </button>
-        )}
       </div>
     </div>
   );
