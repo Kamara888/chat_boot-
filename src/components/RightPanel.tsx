@@ -12,20 +12,17 @@ interface Props {
   chartData: number[];
   moods: Record<string, number>;
   isMobile?: boolean;
-  isOpen?: boolean;
-  onClose?: () => void;
-  inline?: boolean;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, isMobile, isOpen, onClose, inline }: Props) {
+export default function RightPanel({ moodRating, onMoodSelect, chartData, moods, isMobile, collapsed, onToggle }: Props) {
   const totalEntries = Object.values(moods).filter(v => v > 0).length;
   const values = Object.values(moods).filter(v => v > 0);
   const average = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
 
-  const content = (
+  const body = (
     <>
-      <div className="panel-header">📊 Wellness Overview</div>
-
       <div className="panel-section">
         <div className="panel-label">Mood Check-in</div>
         <MoodCheckIn onSelect={onMoodSelect} selected={moodRating} />
@@ -63,23 +60,22 @@ export default function RightPanel({ moodRating, onMoodSelect, chartData, moods,
     </>
   );
 
-  if (inline) {
-    return <div className="panel-inline">{content}</div>;
-  }
-
   if (isMobile) {
     return (
-      <>
-        {isOpen && <div className="backdrop-fixed" onClick={onClose} />}
-        <aside className={`panel-mobile ${isOpen ? 'panel-mobile-open' : ''}`}>
-          <div className="panel-mobile-handle" onClick={onClose}>
-            <div className="panel-mobile-handle-bar" />
-          </div>
-          {content}
-        </aside>
-      </>
+      <aside className="mobile-wellness-card">
+        <div className="mobile-wellness-header" onClick={onToggle}>
+          <span>📊 Wellness Overview</span>
+          <span className={`mobile-wellness-chevron ${!collapsed ? 'open' : ''}`}>▾</span>
+        </div>
+        {!collapsed && <div className="mobile-wellness-body">{body}</div>}
+      </aside>
     );
   }
 
-  return <aside className="panel">{content}</aside>;
+  return (
+    <aside className="panel">
+      <div className="panel-header">📊 Wellness Overview</div>
+      {body}
+    </aside>
+  );
 }

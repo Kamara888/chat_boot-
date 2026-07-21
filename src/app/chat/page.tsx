@@ -24,6 +24,7 @@ export default function ChatPage() {
   const [moods, setMoods] = useState<Record<string, number>>({});
   const [showDashboard, setShowDashboard] = useState(true);
   const [aiDegraded, setAiDegraded] = useState(false);
+  const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesRef = useRef<ChatMessageType[]>([]);
@@ -268,6 +269,17 @@ export default function ChatPage() {
         <CrisisBanner isCrisis={isCrisis} />
         <div className="content">
           <div className="chat-area">
+            {isMobile && (
+              <RightPanel
+                moodRating={moodRating}
+                onMoodSelect={handleMoodSelect}
+                chartData={getChartData()}
+                moods={moods}
+                isMobile
+                collapsed={!mobilePanelExpanded}
+                onToggle={() => setMobilePanelExpanded(v => !v)}
+              />
+            )}
             <div className="messages">
               {messages.length === 0 && (
                 <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text3)' }}>
@@ -286,15 +298,6 @@ export default function ChatPage() {
               {isLoading && <TypingIndicator />}
               <div ref={messagesEndRef} />
             </div>
-            {isMobile && (
-              <RightPanel
-                moodRating={moodRating}
-                onMoodSelect={handleMoodSelect}
-                chartData={getChartData()}
-                moods={moods}
-                inline
-              />
-            )}
             {voiceMode ? (
               <VoiceControl
                 isListening={recognition.isListening}
